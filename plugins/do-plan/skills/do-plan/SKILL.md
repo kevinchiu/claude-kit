@@ -1,6 +1,6 @@
 ---
 name: do-plan
-description: Persistent plan execution. Use when user says "do the plan", "execute", "implement", "proceed", "let's do it", "continue plan", or "resume". Tracks progress in state files for crash recovery.
+description: Persistent parallel plan execution. Use when user says "do the plan", "execute", "implement", "proceed", "let's do it", "continue plan", or "resume". Tracks progress in state files for crash recovery.
 ---
 
 # Do Plan

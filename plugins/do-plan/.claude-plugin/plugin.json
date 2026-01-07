@@ -1,7 +1,7 @@
 {
   "name": "do-plan",
   "version": "0.1.0",
-  "description": "Persistent plan execution",
+  "description": "Persistent parallel plan execution",
   "author": {
     "name": "Kevin Chiu"
   }
