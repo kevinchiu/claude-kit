@@ -1,6 +1,6 @@
 # do-plan
 
-Persistent plan execution.
+Durable plan execution with parallel agents.
 
 ## Features
 

@@ -1,6 +1,8 @@
 # claude-kit
 
-Personal Claude Code plugin marketplace.
+Agentic workflow orchestration for Claude Code.
+
+Started with elaborate orchestration: beads, agent mailboxes, dev containers, worktrees. Turned out the bottleneck was me. Claude just needs a plan and room to run.
 
 ## Installation
 
@@ -12,7 +14,7 @@ Personal Claude Code plugin marketplace.
 
 | Plugin | Description |
 |--------|-------------|
-| [do-plan](./plugins/do-plan) | Persistent plan execution |
+| [do-plan](./plugins/do-plan) | Durable plan execution with parallel agents |
 
 ## Install a Plugin
 

@@ -1,12 +1,13 @@
 {
   "name": "claude-kit",
+  "description": "Agentic workflow orchestration for Claude Code",
   "owner": {
     "name": "Kevin Chiu"
   },
   "plugins": [
     {
       "name": "do-plan",
-      "description": "Persistent parallel plan execution",
+      "description": "Durable plan execution with parallel agents",
       "source": "./plugins/do-plan"
     }
   ]
