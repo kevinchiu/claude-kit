@@ -6,9 +6,9 @@
   },
   "plugins": [
     {
-      "name": "do-plan",
-      "description": "Durable plan execution with parallel agents",
-      "source": "./plugins/do-plan"
+      "name": "claude-kit",
+      "description": "Claude Code productivity toolkit",
+      "source": "./plugins/claude-kit"
     }
   ]
 }

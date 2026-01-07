@@ -1,8 +1,0 @@
-{
-  "name": "do-plan",
-  "version": "0.1.0",
-  "description": "Durable plan execution with parallel agents",
-  "author": {
-    "name": "Kevin Chiu"
-  }
-}

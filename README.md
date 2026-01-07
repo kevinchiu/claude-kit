@@ -15,15 +15,26 @@ Powerful plugins for Claude Code.
 3. Enter `kevinchiu/claude-kit`
 4. Browse and install plugins from the marketplace
 
+## Migration from do-plan
+
+If you previously installed `do-plan`, uninstall it and install `claude-kit`:
+
+```
+/plugin → Uninstall → do-plan
+/plugin → Install → claude-kit
+```
+
 ## Plugins
 
 | Plugin | Description |
 |--------|-------------|
-| [do-plan](./plugins/do-plan) | Durable plan execution with parallel agents |
+| [claude-kit](./plugins/claude-kit) | Claude Code productivity toolkit |
 
-## do-plan
+## claude-kit
 
-State tracking in `.claude/plans/*.state.md` with crash recovery and auto-resume on session start.
+### do-plan
+
+Durable plan execution with state tracking in `.claude/plans/*.state.md`, crash recovery, and auto-resume on session start.
 
 ```
 /do-plan <plan-file>

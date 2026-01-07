@@ -1,0 +1,8 @@
+{
+  "name": "claude-kit",
+  "version": "0.1.0",
+  "description": "Claude Code productivity toolkit",
+  "author": {
+    "name": "Kevin Chiu"
+  }
+}
