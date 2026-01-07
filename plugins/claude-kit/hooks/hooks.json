@@ -2,12 +2,8 @@
   "hooks": {
     "SessionStart": [
       {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check for in-progress plans: Look for `.state.md` files in `.claude/plans/`. If any have incomplete steps (status not COMPLETED), notify: \"Found in-progress plan: '[name]' (X/Y steps). Say 'continue plan' to resume.\" Do not auto-resume - wait for user confirmation."
-          }
-        ]
+        "type": "prompt",
+        "prompt": "Check for in-progress plans: Look for `.state.md` files in `.claude/plans/`. If any have incomplete steps (status not COMPLETED), notify: \"Found in-progress plan: '[name]' (X/Y steps). Say 'continue plan' to resume.\" Do not auto-resume - wait for user confirmation."
       }
     ]
   }
