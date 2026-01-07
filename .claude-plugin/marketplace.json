@@ -1,6 +1,6 @@
 {
   "name": "claude-kit",
-  "description": "Agentic workflow orchestration for Claude Code",
+  "description": "Powerful plugins for Claude Code",
   "owner": {
     "name": "Kevin Chiu"
   },
