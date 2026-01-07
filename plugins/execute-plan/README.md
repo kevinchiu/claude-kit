@@ -8,6 +8,7 @@ Claude Code plugin for executing implementation plans with session persistence.
 - Session crash recovery
 - Resumable execution across sessions
 - Progress checkpointing after each step
+- **SessionStart hook** - automatically detects in-progress plans on startup
 
 ## Installation
 
