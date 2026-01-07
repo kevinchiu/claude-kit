@@ -1,0 +1,13 @@
+{
+  "name": "claude-kit",
+  "owner": {
+    "name": "Kevin Chiu"
+  },
+  "plugins": [
+    {
+      "name": "execute-plan",
+      "description": "Execute implementation plans with session persistence and crash recovery",
+      "source": "./plugins/execute-plan"
+    }
+  ]
+}
