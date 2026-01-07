@@ -2,7 +2,11 @@
 
 Agentic workflow orchestration for Claude Code.
 
-Started with elaborate orchestration: beads, agent mailboxes, dev containers, worktrees. Turned out the bottleneck was me. Claude just needs a plan and room to run.
+- ~~beads~~
+- ~~agent mailboxes~~
+- ~~dev containers~~
+- ~~worktrees~~
+- durable parallel execution across sessions
 
 ## Installation
 
