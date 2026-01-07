@@ -1,8 +1,0 @@
-{
-  "name": "execute-plan",
-  "version": "0.1.0",
-  "description": "Execute implementation plans with session persistence and crash recovery",
-  "author": {
-    "name": "kgc"
-  }
-}

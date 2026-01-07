@@ -1,11 +1,11 @@
 ---
-name: execute-plan
-description: Executes implementation plans with session persistence. Use when: (1) implementing any plan from plan mode, (2) working on multi-step tasks that may span sessions, (3) user says "execute", "implement", "proceed", "let's do it", "start working" after planning, (4) resuming interrupted work. Tracks progress in state files for crash recovery and session restart. Keywords: execute plan, implement plan, proceed with plan, let's do it, start implementation, resume, continue, multi-step, long task, persistent progress.
+name: do-plan
+description: Persistent plan execution. Use when user says "do the plan", "execute", "implement", "proceed", "let's do it", "continue plan", or "resume". Tracks progress in state files for crash recovery.
 ---
 
-# Execute Plan
+# Do Plan
 
-Execute arbitrarily long plans with persistent state tracking across sessions.
+Persistent plan execution with state tracking across sessions.
 
 ## Core Principles
 

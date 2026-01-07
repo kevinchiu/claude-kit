@@ -5,9 +5,9 @@
   },
   "plugins": [
     {
-      "name": "execute-plan",
-      "description": "Execute implementation plans with session persistence and crash recovery",
-      "source": "./plugins/execute-plan"
+      "name": "do-plan",
+      "description": "Persistent plan execution",
+      "source": "./plugins/do-plan"
     }
   ]
 }

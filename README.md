@@ -4,22 +4,18 @@ Personal Claude Code plugin marketplace.
 
 ## Installation
 
-```bash
+```
 /plugin marketplace add kevinchiu/claude-kit
 ```
 
-## Available Plugins
+## Plugins
 
 | Plugin | Description |
 |--------|-------------|
-| [execute-plan](./plugins/execute-plan) | Execute implementation plans with session persistence and crash recovery |
+| [do-plan](./plugins/do-plan) | Persistent plan execution |
 
-## Installing a Plugin
+## Install a Plugin
 
-```bash
-/plugin install execute-plan@claude-kit
 ```
-
-## License
-
-MIT
+/plugin install do-plan@claude-kit
+```
