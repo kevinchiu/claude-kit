@@ -52,13 +52,13 @@ Groups:
 Status: pending
 Dependencies: None
 Files: [paths]
-Agent: general-purpose (sonnet)
+Agent: general-purpose (opus)
 
 ### Step 2: [Description]
 Status: pending
 Dependencies: None
 Files: [paths]
-Agent: general-purpose (sonnet)
+Agent: general-purpose (opus)
 ```
 
 ### 2.2 Analyze Dependencies
@@ -100,8 +100,9 @@ For each group:
 
 | Step Type | Agent | Model |
 |-----------|-------|-------|
-| Implement feature | general-purpose | sonnet |
-| Fix bug | general-purpose | sonnet |
+| Implement feature | general-purpose | opus |
+| Fix bug | general-purpose | opus |
+| Write tests | general-purpose | opus |
 | Explore/research | Explore | sonnet |
 | Simple changes | general-purpose | haiku |
 | Complex architecture | general-purpose | opus |
