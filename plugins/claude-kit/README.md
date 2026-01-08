@@ -4,24 +4,38 @@ Autonomous parallel plan execution with dependency-aware critical path optimizat
 
 ## What It Does
 
-Takes an approved plan and executes it autonomously:
-- **Analyzes dependencies** between steps
-- **Parallelizes independent steps** using subagents
-- **Optimizes for total time** (critical path), not sequential execution
-- **Tracks state** for crash recovery and session resumption
+**Plan** → **Execute** workflow:
+1. **Plan**: Parallel exploration, architecture design, user approval
+2. **Execute**: Autonomous parallel execution with state tracking
 
 ## Skills
+
+### plan
+
+Creates implementation plans with parallel exploration and user approval.
+
+**How it works:**
+1. Launches parallel Explore agents to understand codebase
+2. Designs implementation approach with Plan agents
+3. Writes plan to `.claude/plans/[name].md`
+4. Exits plan mode for user approval
+
+**Usage:**
+```
+/plan [task description]
+```
 
 ### do-plan
 
 Executes plans in parallel with state tracking.
 
 **How it works:**
-1. Creates state file at `.claude/plans/[name].state.md`
-2. Performs critical path analysis (which steps can run in parallel)
-3. Launches multiple Task agents for independent steps
-4. Tracks progress with status markers (⏳ pending, 🔄 in_progress, ✅ completed, ❌ blocked)
-5. Resumes from last checkpoint if interrupted
+1. Launches parallel Explore agents to understand codebase
+2. Creates state file at `.claude/plans/[name].state.md`
+3. Analyzes dependencies and builds execution groups
+4. Launches multiple Task agents for independent steps
+5. Tracks progress with status markers (⏳ pending, 🔄 in_progress, ✅ completed, ❌ blocked)
+6. Resumes from last checkpoint if interrupted
 
 **Usage:**
 ```
