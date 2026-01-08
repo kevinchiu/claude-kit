@@ -18,29 +18,39 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 ## Phase 1: Explore
 
-Launch up to 3 Explore agents (sonnet, 1M context) in ONE message (parallel).
+Launch 6 Explore agents (sonnet, 1M context) in ONE message (parallel).
 
 Tools available: Glob, Grep, Read, and native LSP tools (go-to-definition, find-references, hover). Use all of them.
 
 **Task 1 (structure):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Use Glob to find all source files. Read package.json, config files, and entry points. Use LSP tools for type information. Explore thoroughly - you have 1M context. Report: complete tree structure, key directories, entry points, build system, test framework.
+- prompt: Map complete directory structure. Use Glob to find all source files. Read entry points. You have 1M context. Report: tree structure, key directories, entry points, file organization patterns.
 
 **Task 2 (patterns):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Find existing patterns for [AREA FROM REQUEST]. Use Grep to search, LSP find-references for usage patterns. Read multiple example files fully - you have 1M context. Report: pattern locations, full code examples, conventions, naming standards.
+- prompt: Find existing patterns for [AREA FROM REQUEST]. Use Grep to search, LSP find-references for usage. Read example files fully - you have 1M context. Report: pattern locations, full code examples, conventions, naming standards.
 
 **Task 3 (dependencies):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Identify all files to modify for [REQUEST]. Use Grep and LSP go-to-definition to trace imports. Read related files fully - you have 1M context. Report: complete file list, dependency graph, modification order, potential conflicts.
+- prompt: Analyze dependencies for [FILES FROM REQUEST]. Use Grep and LSP go-to-definition to trace imports. You have 1M context. Report: dependency graph, modification order, potential conflicts.
 
-Agent count:
-- 1 agent: isolated to known files
-- 2 agents: moderate scope
-- 3 agents: uncertain scope, unfamiliar codebase
+**Task 4 (types):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Find all types, interfaces, and API contracts related to [REQUEST]. Use LSP hover for type info. Read type definition files fully - you have 1M context. Report: relevant types, data shapes, API surfaces, contracts to honor.
+
+**Task 5 (tests):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Find test patterns for [AREA FROM REQUEST]. Locate test files, fixtures, mocks. Read example tests fully - you have 1M context. Report: test file locations, testing conventions, fixture patterns, coverage expectations.
+
+**Task 6 (config):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Analyze build system and configuration. Read package.json, tsconfig, webpack/vite config, env files. You have 1M context. Report: build process, env vars needed, external service dependencies, deployment considerations.
 
 ## Phase 2: Clarify
 

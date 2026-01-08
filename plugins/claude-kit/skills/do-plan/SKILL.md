@@ -16,14 +16,14 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 ## Phase 1: Explore
 
-Launch 3 Explore agents (sonnet, 1M context) in ONE message (parallel).
+Launch 6 Explore agents (sonnet, 1M context) in ONE message (parallel).
 
 Tools available: Glob, Grep, Read, and native LSP tools (go-to-definition, find-references, hover). Use all of them.
 
 **Task 1 (structure):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Use Glob to find all source files. Read config files and entry points. Use LSP tools for type info - you have 1M context. Report: complete tree structure, key directories, build system.
+- prompt: Map complete directory structure. Use Glob to find all source files. Read entry points - you have 1M context. Report: tree structure, key directories, entry points.
 
 **Task 2 (patterns):**
 - subagent_type: Explore
@@ -33,7 +33,22 @@ Tools available: Glob, Grep, Read, and native LSP tools (go-to-definition, find-
 **Task 3 (dependencies):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Analyze dependencies between [FILES FROM PLAN]. Use Grep and LSP go-to-definition to trace imports - you have 1M context. Report: complete dependency graph, modification order.
+- prompt: Analyze dependencies between [FILES FROM PLAN]. Use Grep and LSP go-to-definition - you have 1M context. Report: dependency graph, modification order.
+
+**Task 4 (types):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Find types and interfaces for [PLAN AREA]. Use LSP hover for type info - you have 1M context. Report: relevant types, data shapes, API contracts.
+
+**Task 5 (tests):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Find test patterns for [PLAN AREA]. Locate test files, fixtures - you have 1M context. Report: test conventions, fixture patterns.
+
+**Task 6 (config):**
+- subagent_type: Explore
+- model: sonnet
+- prompt: Analyze build and config. Read package.json, config files, env - you have 1M context. Report: build process, env vars needed, external dependencies.
 
 ## Phase 2: Setup
 
