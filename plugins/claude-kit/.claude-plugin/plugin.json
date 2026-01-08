@@ -1,6 +1,6 @@
 {
   "name": "claude-kit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Autonomous parallel plan execution with dependency-aware critical path optimization",
   "author": {
     "name": "Kevin Chiu"

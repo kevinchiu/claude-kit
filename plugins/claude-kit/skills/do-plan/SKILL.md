@@ -7,74 +7,175 @@ description: Autonomous parallel plan execution with dependency-aware critical p
 
 Autonomous parallel plan execution with dependency-aware critical path optimization.
 
-## MANDATORY FIRST STEPS (Do These Before ANY Implementation)
+## Architecture
 
-**You MUST complete steps 1-3 before writing any code:**
+```
+┌─────────────────────────────────────────────────────┐
+│                   MAIN AGENT                        │
+│  - Owns state file (only writer)                    │
+│  - Analyzes dependencies                            │
+│  - Launches subagents via Task tool                 │
+│  - Collects results and updates state              │
+└─────────────────────────────────────────────────────┘
+          │               │               │
+          ▼               ▼               ▼
+    ┌──────────┐   ┌──────────┐   ┌──────────┐
+    │ Task     │   │ Task     │   │ Task     │
+    │ Agent 1  │   │ Agent 2  │   │ Agent 3  │
+    │ (Step A) │   │ (Step B) │   │ (Step C) │
+    └──────────┘   └──────────┘   └──────────┘
+    Independent steps run in parallel
+```
 
-### Step 1: Create State File IMMEDIATELY
-
-Before doing anything else, create `.claude/plans/[plan-name].state.md` using the template below. This is NON-NEGOTIABLE - the state file must exist before any implementation begins.
-
-### Step 2: Critical Path Analysis
-
-Analyze the plan steps and identify:
-- **Independent steps** that can run in parallel (no dependencies between them)
-- **Dependent steps** that must run sequentially (step B needs output from step A)
-- **Long-running steps** (tests, builds) that should run in background
-
-Document this analysis in the state file under "## Execution Strategy".
-
-### Step 3: Launch Parallel Subagents
-
-For independent steps, you MUST use Task tool to launch multiple subagents in a SINGLE message. Do not execute steps sequentially when they can be parallelized.
-
-Example: If steps 1, 2, 3 are independent, launch 3 Task agents in one message block.
+**Key principle:** Subagents do work and return results. Only the main agent updates the state file.
 
 ---
 
-## Core Principles
+## MANDATORY FIRST STEPS
 
-1. **Every state change must be saved immediately** - sessions can end at any moment.
+**Complete these before ANY implementation:**
 
-2. **Zero-prompt execution** - All blockers are resolved during planning. Execution never prompts.
+### Step 1: Explore the Codebase (parallel)
 
-## When to Activate
+Launch multiple `Explore` agents in parallel to understand the codebase:
 
-**DO activate when:**
-- User explicitly asks to execute a plan
-- User says "execute", "implement", "proceed" after planning
-- User runs `/execute-plan` command
-- User says "continue plan" and state file exists
+```
+Single message with multiple Task tool calls:
 
-**DO NOT activate when:**
-- No plan exists (don't create one automatically)
-- User is just discussing or brainstorming
-- Plan mode is still active (planning not finished)
-- User hasn't approved the plan
+Task 1 (structure):
+- subagent_type: "Explore"
+- prompt: "Map the directory structure and file organization.
+  Identify: main source dirs, config files, test locations, build outputs.
+  Report: tree structure, key directories, entry points."
 
-**If no plan exists:** Simply inform the user "No plan found to execute. Please create a plan first or describe what you want to implement."
+Task 2 (patterns):
+- subagent_type: "Explore"
+- prompt: "Find existing patterns for [relevant area from plan].
+  Search for similar implementations to: [list what plan needs to build].
+  Report: pattern locations, code examples, conventions used."
 
-## Pre-Execution Checks
+Task 3 (dependencies):
+- subagent_type: "Explore"
+- prompt: "Analyze dependencies between these files: [list files from plan].
+  Identify: imports, shared types, call relationships.
+  Report: dependency graph, execution order constraints."
+```
 
-Before creating state file, verify the plan is executable:
+Use exploration results to inform dependency analysis and provide context to subagents.
 
-1. **Plan completeness** - Each step has:
-   - Target file path
-   - Pattern/example to follow (or reference in CLAUDE.md)
-   - Data sources / dependencies
+### Step 2: Create State File
 
-2. **Credentials/secrets** - For each external service:
-   - Use Grep to check config files have required keys
-   - Use Bash to verify env vars exist: `test -n "$VAR_NAME"`
-   - Optionally test connectivity
+Create `.claude/plans/[plan-name].state.md` using the template below. This must exist before implementation begins.
 
-3. **Codebase patterns** - Read 1-2 similar implementations per step type
+### Step 3: Analyze Dependencies (using exploration results)
 
-If anything missing → reject plan with specific requirements, don't start execution.
+For each step, determine its dependencies using these criteria:
 
-### State File Template
+| Dependency Type | How to Detect |
+|-----------------|---------------|
+| **File dependency** | Step B modifies a file that Step A creates |
+| **Code dependency** | Step B imports/uses code that Step A writes |
+| **Data dependency** | Step B needs output/result from Step A |
+| **Order dependency** | Step B tests/validates what Step A implements |
 
-Write this to `.claude/plans/[plan-name].state.md`:
+**Steps are independent if:** They touch different files AND don't share data AND neither validates the other.
+
+### Step 4: Build Execution Groups
+
+Organize steps into groups:
+
+```
+Group 1 (parallel):  [independent steps] → launch simultaneously
+Group 2 (parallel):  [steps dependent on Group 1] → launch after Group 1 completes
+Group 3 (background): [tests/builds] → run while other work continues
+```
+
+### Step 5: Launch Parallel Subagents
+
+For each group of independent steps, launch ALL subagents in a SINGLE message using multiple Task tool calls.
+
+---
+
+## Execution Flow
+
+### Phase 1: Exploration
+1. Read the plan file
+2. Launch parallel Explore agents (structure, patterns, dependencies)
+3. Collect exploration results
+
+### Phase 2: Setup
+1. Create state file with all steps marked ⏳ pending
+2. Use exploration results to analyze dependencies
+3. Document execution groups in state file
+4. Save state file
+
+### Phase 3: Execute Groups
+For each execution group:
+
+1. **Mark steps in_progress** - Update state file for all steps in this group
+2. **Launch subagents in parallel** - Single message with multiple Task calls
+3. **Wait for results** - All subagents in group must complete
+4. **Process results** - For each completed subagent:
+   - If success: Mark step ✅ completed, record notes
+   - If blocked: Mark step ❌ blocked, record reason
+5. **Save state file**
+6. **Proceed to next group** (or handle blocks)
+
+### Phase 4: Completion
+1. Update progress to N/N
+2. Generate summary
+3. Archive state file
+
+---
+
+## Launching Subagents
+
+Use the Task tool with appropriate agent types:
+
+### Agent Type Selection
+
+| Step Type | Agent Type | Model |
+|-----------|------------|-------|
+| Implement feature | `general-purpose` | sonnet |
+| Fix bug | `general-purpose` | sonnet |
+| Explore/research | `Explore` | sonnet |
+| Simple file changes | `general-purpose` | haiku |
+| Complex architecture | `general-purpose` | opus |
+| Run tests | `Bash` | haiku |
+
+### Subagent Prompt Template
+
+```
+Implement step [N] of the plan: [step description]
+
+Context from exploration:
+- Codebase structure: [summary from structure Explore agent]
+- Pattern to follow: [path/to/example.ts from patterns Explore agent]
+- Related files: [from dependencies Explore agent]
+
+Files to modify: [list]
+
+Requirements:
+- [specific requirements from plan]
+
+Do NOT create a state file. Just implement the step and report what you did.
+```
+
+### Parallel Launch Example
+
+To run steps 1, 2, 3 in parallel, send ONE message with THREE Task tool calls:
+
+```
+<Task tool call 1: Step 1 prompt, subagent_type="general-purpose", model="sonnet">
+<Task tool call 2: Step 2 prompt, subagent_type="general-purpose", model="sonnet">
+<Task tool call 3: Step 3 prompt, subagent_type="Explore", model="haiku">
+```
+
+---
+
+## State File Template
+
+Write to `.claude/plans/[plan-name].state.md`:
 
 ```markdown
 # Plan: [Name]
@@ -85,153 +186,96 @@ Last Updated: [date time]
 
 ## Execution Strategy
 
-**Parallel groups:**
-- Group 1 (parallel): Steps 1, 2, 3 - no dependencies
-- Group 2 (sequential): Step 4 depends on 1, 2
-- Group 3 (background): Step 5 (tests) - run while doing Group 2
+**Dependency analysis:**
+- Step 1: No dependencies (independent)
+- Step 2: No dependencies (independent)
+- Step 3: Depends on Step 1 (uses code from Step 1)
+- Step 4: Depends on Steps 1, 2, 3 (integration test)
 
-**Model assignment:**
-- Steps 1, 2: sonnet (mechanical changes)
-- Step 3: haiku (simple lookup)
-- Step 4: opus (complex reasoning)
+**Execution groups:**
+- Group 1 (parallel): Steps 1, 2
+- Group 2 (sequential): Step 3 (after Group 1)
+- Group 3 (after all): Step 4 (tests)
 
 ## Steps
 
 ### Step 1: [Description]
 **Status:** ⏳ pending
-**Blocked by:** None
+**Dependencies:** None
 **Files:** [files to modify]
+**Agent:** general-purpose (sonnet)
 
-[Repeat for all steps]
+### Step 2: [Description]
+**Status:** ⏳ pending
+**Dependencies:** None
+**Files:** [files to modify]
+**Agent:** general-purpose (sonnet)
+
+### Step 3: [Description]
+**Status:** ⏳ pending
+**Dependencies:** Step 1
+**Files:** [files to modify]
+**Agent:** general-purpose (sonnet)
 ```
 
-## Executing Steps
+---
 
-For each step:
+## Tool Priority
 
-### Before Starting
-1. Update status to `🔄 in_progress`
-2. Add `Started: [timestamp]`
-3. **Save state file immediately**
+Prefer existing tools over bash commands:
 
-### During Execution
-- Implement the step autonomously
-- If complex, add progress notes to state file periodically
-- Research using Glob, Grep, Read to understand patterns
-- Document non-obvious decisions in state file notes
+| Task | Use This | Not This |
+|------|----------|----------|
+| Read file | `Read` tool | `cat`, `head`, `tail` |
+| Search content | `Grep` tool | `grep`, `rg` |
+| Find files | `Glob` tool | `find`, `ls` |
+| Edit file | `Edit` tool | `sed`, `awk` |
+| Write file | `Write` tool | `echo >`, heredoc |
+| Run commands | `Bash` tool | Only when necessary |
 
-### After Completing
-1. Update status to `✅ completed`
-2. Add `Completed: [timestamp]`
-3. Add `Notes:` with summary of what was done
-4. Update progress counter
-5. **Save state file immediately**
+---
 
-### On Failure/Block
-1. Update status to `❌ blocked`
-2. Add `Blocked reason:` explanation
-3. **Save state file immediately**
-4. Ask user (independent steps already running in parallel)
+## Handling Blocks
 
-## Resuming a Plan (Hybrid Approach)
+When a subagent reports it's blocked:
 
-**On session start** (via CLAUDE.md instruction):
-1. Check `.claude/plans/` for any `.state.md` files
-2. If incomplete plans exist, **notify** (don't auto-resume):
-   > "📋 Found in-progress plan: '[name]' (5/12 steps). Say 'continue plan' to resume."
-3. Wait for user confirmation before resuming
+1. Mark step ❌ blocked in state file
+2. Record the block reason
+3. **Continue with independent steps** - Don't stop everything
+4. After current group completes, assess blocks:
+   - Can you resolve it? → Fix and retry
+   - Need user input? → Ask user (only exception to zero-prompt)
 
-**When user says "continue plan":**
-1. **Read state file**
-2. **Summarize progress**:
-   - "Resuming plan [name]: 5/12 steps completed"
-   - "Last completed: Step 5 - Added user authentication"
-   - "Next step: Step 6 - Create login endpoint"
-3. **Find resume point**:
-   - If step is `in_progress`: Assess partial work, complete or restart
-   - If step is `pending`: Start fresh
-4. **Continue execution**
+---
 
-## Execution Optimization
+## Resuming a Plan
 
-**Critical path optimization** - minimize total execution time:
+**On "continue plan":**
 
-1. **Parallelize independent steps** - Use Task agents for steps that don't depend on each other
-   - Launch multiple agents in a single message for parallel execution
-   - Each agent works on a separate step simultaneously
+1. Read state file
+2. Find resume point:
+   - Steps marked 🔄 in_progress → Reassess, may need restart
+   - Steps marked ⏳ pending → Ready to execute
+3. Rebuild execution groups from remaining steps
+4. Continue execution flow from Phase 2
 
-2. **Model selection by complexity:**
-   - `haiku`: Quick lookups, simple file reads, status checks
-   - `sonnet`: Exploration, mechanical changes, most implementation work
-   - `opus`: Complex reasoning, architectural decisions, tricky bugs
+---
 
-3. **Background long-running tasks:**
-   - Start tests/builds in background
-   - Continue with independent work while waiting
-   - Check results when needed
+## Core Principles
 
-4. **Batch file operations:**
-   - Read multiple files in parallel when exploring
-   - Make independent edits in parallel
+1. **State file ownership** - Only main agent writes to state file
+2. **Parallel by default** - If steps CAN run in parallel, they MUST
+3. **Zero-prompt execution** - Never ask user during execution (except blocks)
+4. **Immediate state saves** - Save after every status change
+5. **Tool preference** - Use Read/Edit/Glob/Grep over bash equivalents
 
-## Prompt Avoidance
-
-**During execution:** Research → Decide → Document → Proceed
-
-Before each step, read 2-3 similar implementations. This answers most questions.
-
-**When uncertain, use defaults:**
-- Naming: match nearest similar code
-- Errors: match existing patterns
-- Tests: unit tests for logic only
-- Style: simpler over abstract
-
-**Assume and document** (`Assumed: X because Y` in state file) unless:
-- Data loss risk
-- Security impact
-- Public API change
-
-**Prompt only** when blocked and cannot proceed.
-
-## Step Granularity Guidelines
-
-Good steps are:
-- **Atomic** - Can be completed in one focused effort
-- **Verifiable** - Clear success criteria
-- **Self-contained** - Minimal dependencies on other steps
-- **Resumable** - If interrupted, can restart cleanly
-
-Split if step would take >15 minutes or touch >3 files.
-
-## Plan Completion & Cleanup
-
-When all steps are completed:
-
-1. **Update final status** in state file:
-   - Change progress to "N/N steps completed"
-   - Add completion timestamp
-   - Mark plan status as `✅ COMPLETED`
-
-2. **Generate completion summary:**
-   - List all completed steps with notes
-   - Total duration (created → completed)
-   - Key decisions made
-   - Any issues encountered and resolutions
-
-3. **Archive state file:**
-   - Move from `.claude/plans/[name].state.md` to `.claude/plans/archive/[name].state.md`
-   - Keep for reference but don't trigger resume notifications
-
-4. **Cleanup:**
-   - Remove any temporary files created during execution
-   - Clear related TodoWrite items
+---
 
 ## Commands
 
 The user can say:
-- "Continue the plan" - Resume from current step
+- "Continue the plan" - Resume from current state
 - "Show plan status" - Display progress summary
-- "Skip step N" - Mark step as skipped, move on
-- "Restart step N" - Reset step to pending, re-execute
+- "Skip step N" - Mark as skipped, continue
+- "Restart step N" - Reset to pending, re-execute
 - "Abort plan" - Stop execution (state preserved)
-- "Complete plan" - Mark current plan as done, run cleanup
