@@ -27,7 +27,7 @@ Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover).
 | dependencies | Analyze deps for [FILES FROM PLAN]. Grep, LSP go-to-definition. | dep graph, modification order |
 | types | Find types/interfaces for [PLAN AREA]. LSP hover. | types, data shapes, API contracts |
 | tests | Find test patterns for [PLAN AREA]. Locate fixtures. | test conventions, fixtures |
-| config | Analyze build/config. Read package.json, .env.example. | build process, env vars, external deps |
+| config | Analyze build/config. Read package.json, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
 
 ## Phase 2: Setup
 
