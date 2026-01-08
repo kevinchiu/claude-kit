@@ -7,6 +7,31 @@ description: Persistent parallel plan execution. Use when user says "do the plan
 
 Persistent plan execution with state tracking across sessions.
 
+## MANDATORY FIRST STEPS (Do These Before ANY Implementation)
+
+**You MUST complete steps 1-3 before writing any code:**
+
+### Step 1: Create State File IMMEDIATELY
+
+Before doing anything else, create `.claude/plans/[plan-name].state.md` using the template below. This is NON-NEGOTIABLE - the state file must exist before any implementation begins.
+
+### Step 2: Critical Path Analysis
+
+Analyze the plan steps and identify:
+- **Independent steps** that can run in parallel (no dependencies between them)
+- **Dependent steps** that must run sequentially (step B needs output from step A)
+- **Long-running steps** (tests, builds) that should run in background
+
+Document this analysis in the state file under "## Execution Strategy".
+
+### Step 3: Launch Parallel Subagents
+
+For independent steps, you MUST use Task tool to launch multiple subagents in a SINGLE message. Do not execute steps sequentially when they can be parallelized.
+
+Example: If steps 1, 2, 3 are independent, launch 3 Task agents in one message block.
+
+---
+
 ## Core Principles
 
 1. **Every state change must be saved immediately** - sessions can end at any moment.
@@ -47,15 +72,6 @@ Before creating state file, verify the plan is executable:
 
 If anything missing → reject plan with specific requirements, don't start execution.
 
-## Starting a New Plan
-
-When given an approved plan to execute:
-
-1. **Parse into steps** - Break into atomic, completable units
-2. **Create state file** at `.claude/plans/[plan-name].state.md`
-3. **Initialize all steps** as pending
-4. **Begin execution** from step 1
-
 ### State File Template
 
 Write this to `.claude/plans/[plan-name].state.md`:
@@ -66,6 +82,18 @@ Created: [date]
 Last Updated: [date time]
 
 ## Progress: 0/N steps completed
+
+## Execution Strategy
+
+**Parallel groups:**
+- Group 1 (parallel): Steps 1, 2, 3 - no dependencies
+- Group 2 (sequential): Step 4 depends on 1, 2
+- Group 3 (background): Step 5 (tests) - run while doing Group 2
+
+**Model assignment:**
+- Steps 1, 2: sonnet (mechanical changes)
+- Step 3: haiku (simple lookup)
+- Step 4: opus (complex reasoning)
 
 ## Steps
 
