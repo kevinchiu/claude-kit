@@ -18,22 +18,22 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 ## Phase 1: Explore
 
-Launch up to 3 Explore agents in ONE message (parallel):
+Launch up to 3 Explore agents (sonnet, 1M context) in ONE message (parallel):
 
 **Task 1 (structure):**
 - subagent_type: Explore
-- model: haiku
-- prompt: Map directory structure. Identify: source dirs, config files, test locations. Report: tree structure, entry points.
+- model: sonnet
+- prompt: Use Glob to find all source files. Read package.json, config files, and entry points. Explore directory structure thoroughly - you have 1M context. Report: complete tree structure, key directories, entry points, build system, test framework.
 
 **Task 2 (patterns):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Find existing patterns for [AREA FROM REQUEST]. Search for similar implementations. Report: pattern locations, code examples.
+- prompt: Find existing patterns for [AREA FROM REQUEST]. Use Grep to search for similar implementations. Read multiple example files fully - you have 1M context. Report: pattern locations, full code examples, conventions, naming standards.
 
 **Task 3 (dependencies):**
 - subagent_type: Explore
-- model: haiku
-- prompt: Identify files to modify for [REQUEST]. Analyze imports, shared types. Report: file list, dependency order.
+- model: sonnet
+- prompt: Identify all files to modify for [REQUEST]. Use Grep to trace imports and references. Read related files fully to understand relationships - you have 1M context. Report: complete file list, dependency graph, modification order, potential conflicts.
 
 Agent count:
 - 1 agent: isolated to known files
