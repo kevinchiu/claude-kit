@@ -67,12 +67,15 @@ Dependency types:
 
 | Type | Detection |
 |------|-----------|
+| File overlap | Steps modify same file(s) → sequential |
 | File | Step B modifies file Step A creates |
 | Code | Step B imports code Step A writes |
 | Data | Step B needs Step A output |
 | Order | Step B tests what Step A implements |
 
-Independent if: different files AND no shared data AND no validation relationship.
+**File overlap rule:** If two steps touch ANY of the same files, they MUST be sequential (not parallel). This prevents merge conflicts and inconsistent changes.
+
+Independent if: no overlapping files AND no shared data AND no validation relationship.
 
 ### 2.3 Build Execution Groups
 
@@ -108,6 +111,14 @@ For each group:
 | Complex architecture | general-purpose | opus |
 | Run tests | general-purpose | haiku |
 
+### Pre-flight (per step)
+
+Before launching each step's agent, verify:
+1. All listed files exist (or are being created)
+2. Parent directories exist for new files
+
+If files are missing and not being created, mark step blocked.
+
 ### Subagent Prompt
 
 ```
@@ -121,6 +132,13 @@ Context:
 Files: [list]
 Requirements: [from plan]
 
+Parallel work (FYI): [other steps in this group and their files]
+
+Guidelines:
+- If modifying function/method signatures, check for callers first
+- Avoid modifying files assigned to parallel agents unless necessary
+- Report any files you modified beyond your assigned list
+
 Implement and report what you did.
 ```
 
@@ -130,7 +148,9 @@ Implement and report what you did.
 2. Add completion timestamp
 3. Move to `.claude/plans/archive/[name].state.md`
 
-## Handling Blocks
+## Handling Failures
+
+### Blocked Steps
 
 When subagent reports blocked:
 1. Mark step blocked in state
@@ -139,6 +159,18 @@ When subagent reports blocked:
 4. After group completes, assess:
    - Resolvable: fix and retry
    - Needs user: ask (only exception to zero-prompt)
+
+### Context Exhaustion
+
+When subagent fails due to context limit:
+
+1. Check for partial progress (git diff, file changes)
+2. Analyze the step and split into smaller substeps (N.1, N.2, ...)
+3. Update state file with new substeps
+4. Retry with first substep
+5. If substep also exhausts: split again recursively
+
+Main agent decides how to split based on the specific task.
 
 ## Resuming
 
