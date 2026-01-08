@@ -1,11 +1,11 @@
 ---
 name: do-plan
-description: Persistent parallel plan execution. Use when user says "do the plan", "execute", "implement", "proceed", "let's do it", "continue plan", or "resume". Tracks progress in state files for crash recovery.
+description: Autonomous parallel plan execution with dependency-aware critical path optimization. Analyzes step dependencies, parallelizes independent work using subagents, and tracks state for crash recovery. Trigger phrases: "do the plan", "execute", "implement", "proceed", "let's do it", "continue plan", "resume".
 ---
 
 # Do Plan
 
-Persistent plan execution with state tracking across sessions.
+Autonomous parallel plan execution with dependency-aware critical path optimization.
 
 ## MANDATORY FIRST STEPS (Do These Before ANY Implementation)
 
