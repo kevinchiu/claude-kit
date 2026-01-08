@@ -43,18 +43,33 @@ Skip if requirements are unambiguous.
 
 ## Phase 3: Design
 
-Launch up to 3 Plan agents (Opus) based on complexity:
+Default: 1 Plan agent (opus). Follow Claude Code's built-in principles (minimal changes, no over-engineering, no premature abstraction).
 
-| Complexity | Agents | Perspectives |
-|------------|--------|--------------|
-| Simple | 1 | Single approach |
-| Medium | 2 | Minimal vs thorough |
-| Complex | 3 | Simplicity vs performance vs maintainability |
+Multiple agents only for genuine architectural tradeoffs:
+
+| Tradeoff | Perspectives |
+|----------|--------------|
+| Build vs buy | "Use existing lib" vs "Build custom" |
+| Scope | "Minimal (YAGNI)" vs "Extensible" |
+| Performance critical | "Simple first" vs "Optimized" |
 
 **Task (design):**
 - subagent_type: Plan
 - model: opus
-- prompt: Design implementation for [REQUEST] from [PERSPECTIVE] perspective. Context: [exploration results]. Clarifications: [Phase 2 answers]. Provide: steps, files per step, dependencies, risks.
+- prompt: |
+    Design implementation for [REQUEST].
+
+    Exploration context:
+    - Structure: [summary from structure agent]
+    - Patterns: [summary from patterns agent]
+    - Dependencies: [summary from dependencies agent]
+    - Types: [summary from types agent]
+    - Tests: [summary from tests agent]
+    - Config: [summary from config agent]
+
+    Clarifications: [Phase 2 answers]
+
+    Provide: steps, files per step, dependencies between steps, risks.
 
 ## Phase 4: Write Plan
 
