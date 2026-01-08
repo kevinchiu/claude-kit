@@ -18,7 +18,7 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
-Tools: Glob, Grep, Read, Bash, LSP.
+Tools: Glob, Grep, Read, Bash, LSP. Also use any other available tools (MCP, host tools like tree, etc.).
 
 | Agent | Prompt | Report |
 |-------|--------|--------|
