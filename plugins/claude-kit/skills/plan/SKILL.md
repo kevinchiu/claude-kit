@@ -29,7 +29,7 @@ Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover).
 | dependencies | Analyze deps for [FILES]. Grep, LSP go-to-definition. | dep graph, modification order, conflicts |
 | types | Find types/interfaces for [AREA]. LSP hover. | types, data shapes, API contracts |
 | tests | Find test patterns for [AREA]. Locate fixtures, mocks. | test locations, conventions, fixtures |
-| config | Analyze build/config. Read package.json, tsconfig, env. | build process, env vars, external deps |
+| config | Analyze build/config. Read package.json, tsconfig, .env.example. | build process, env vars, external deps |
 
 ## Phase 2: Clarify
 
