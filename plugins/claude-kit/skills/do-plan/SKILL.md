@@ -11,12 +11,7 @@ Persistent plan execution with state tracking across sessions.
 
 1. **Every state change must be saved immediately** - sessions can end at any moment.
 
-2. **Autonomous execution over prompting** - Make informed decisions independently:
-   - Research and explore the codebase to understand context
-   - Use existing patterns and conventions found in the code
-   - Make reasonable implementation choices without asking
-   - Only prompt user when genuinely blocked or facing critical architectural decisions
-   - Document decisions made in state file notes for transparency
+2. **Zero-prompt execution** - All blockers are resolved during planning. Execution never prompts.
 
 ## When to Activate
 
@@ -33,6 +28,24 @@ Persistent plan execution with state tracking across sessions.
 - User hasn't approved the plan
 
 **If no plan exists:** Simply inform the user "No plan found to execute. Please create a plan first or describe what you want to implement."
+
+## Pre-Execution Checks
+
+Before creating state file, verify the plan is executable:
+
+1. **Plan completeness** - Each step has:
+   - Target file path
+   - Pattern/example to follow (or reference in CLAUDE.md)
+   - Data sources / dependencies
+
+2. **Credentials/secrets** - For each external service:
+   - Use Grep to check config files have required keys
+   - Use Bash to verify env vars exist: `test -n "$VAR_NAME"`
+   - Optionally test connectivity
+
+3. **Codebase patterns** - Read 1-2 similar implementations per step type
+
+If anything missing → reject plan with specific requirements, don't start execution.
 
 ## Starting a New Plan
 
@@ -76,9 +89,8 @@ For each step:
 ### During Execution
 - Implement the step autonomously
 - If complex, add progress notes to state file periodically
-- **Research before asking**: Use Glob, Grep, Read to understand patterns
-- **Decide independently**: Choose implementation approaches based on codebase conventions
-- **Document decisions**: Record non-obvious choices in state file notes
+- Research using Glob, Grep, Read to understand patterns
+- Document non-obvious decisions in state file notes
 
 ### After Completing
 1. Update status to `✅ completed`
@@ -91,7 +103,7 @@ For each step:
 1. Update status to `❌ blocked`
 2. Add `Blocked reason:` explanation
 3. **Save state file immediately**
-4. Inform user, ask how to proceed
+4. Ask user (independent steps already running in parallel)
 
 ## Resuming a Plan (Hybrid Approach)
 
@@ -134,31 +146,24 @@ For each step:
    - Read multiple files in parallel when exploring
    - Make independent edits in parallel
 
-## Autonomous Decision-Making
+## Prompt Avoidance
 
-**DO decide independently:**
-- Implementation details (variable names, code structure)
-- Which existing patterns/utilities to use
-- Test approach and coverage
-- Error handling strategy based on codebase norms
-- File organization following project conventions
+**During execution:** Research → Decide → Document → Proceed
 
-**DO research first:**
-- Read similar existing code before implementing
-- Check CLAUDE.md and project docs for conventions
-- Look at existing tests to understand testing patterns
-- Explore imports and dependencies before adding new ones
+Before each step, read 2-3 similar implementations. This answers most questions.
 
-**DO NOT prompt unless:**
-- Genuinely blocked (missing credentials, unclear requirements)
-- Major architectural decision not covered by the plan
-- Discovered significant scope change that affects other parts
-- Found security concern or breaking change
+**When uncertain, use defaults:**
+- Naming: match nearest similar code
+- Errors: match existing patterns
+- Tests: unit tests for logic only
+- Style: simpler over abstract
 
-**DO document in state file:**
-- Decisions made and rationale
-- Patterns discovered and followed
-- Any assumptions made
+**Assume and document** (`Assumed: X because Y` in state file) unless:
+- Data loss risk
+- Security impact
+- Public API change
+
+**Prompt only** when blocked and cannot proceed.
 
 ## Step Granularity Guidelines
 
