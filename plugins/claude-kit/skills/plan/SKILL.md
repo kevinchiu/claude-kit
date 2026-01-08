@@ -81,29 +81,34 @@ Write to `.claude/plans/[plan-name].md`:
 ## Summary
 [1-2 sentences]
 
+## Exploration Context
+- Structure: [key dirs, entry points]
+- Patterns: [relevant patterns found, example paths]
+- Dependencies: [dep graph relevant to this plan]
+- Types: [key types/interfaces involved]
+- Tests: [test patterns, fixture locations]
+- Config: [env vars needed, build considerations]
+
 ## Steps
 
 ### Step 1: [Description]
 - Files: [exact paths]
-- Pattern: [path/to/similar/code.ts]
 - Dependencies: None
-- Details: [implementation notes]
+- Pattern: [path/to/similar/code.ts]
 
 ### Step 2: [Description]
 - Files: [exact paths]
-- Pattern: [path/to/similar/code.ts]
 - Dependencies: Step 1
-- Details: [implementation notes]
+- Pattern: [path/to/similar/code.ts]
 
 ## Verification
-- [How to verify each step]
-- [End-to-end test command]
+[End-to-end test command]
 ```
 
 Required for each step:
 - Exact file paths
-- Pattern/example reference
 - Explicit dependencies
+- Pattern/example reference
 
 ## Phase 5: Pre-flight Validation
 

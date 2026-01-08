@@ -9,14 +9,16 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 ## Execution Phases
 
-1. EXPLORE - Launch parallel Explore agents
+1. EXPLORE - Read from plan or launch agents (if missing)
 2. SETUP - Create state file, analyze dependencies, build execution groups
 3. EXECUTE - Launch parallel subagents per group
 4. COMPLETE - Update state, archive
 
 ## Phase 1: Explore
 
-Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
+**If plan has "Exploration Context" section:** Read it, skip exploration.
+
+**If missing:** Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
 Tools: Glob, Grep, Read, Bash, LSP. Also use any other available tools (MCP, host tools like tree, etc.).
 
