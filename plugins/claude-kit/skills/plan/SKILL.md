@@ -18,22 +18,24 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 ## Phase 1: Explore
 
-Launch up to 3 Explore agents (sonnet, 1M context) in ONE message (parallel):
+Launch up to 3 Explore agents (sonnet, 1M context) in ONE message (parallel).
+
+Tools available: Glob, Grep, Read, and native LSP tools (go-to-definition, find-references, hover). Use all of them.
 
 **Task 1 (structure):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Use Glob to find all source files. Read package.json, config files, and entry points. Explore directory structure thoroughly - you have 1M context. Report: complete tree structure, key directories, entry points, build system, test framework.
+- prompt: Use Glob to find all source files. Read package.json, config files, and entry points. Use LSP tools for type information. Explore thoroughly - you have 1M context. Report: complete tree structure, key directories, entry points, build system, test framework.
 
 **Task 2 (patterns):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Find existing patterns for [AREA FROM REQUEST]. Use Grep to search for similar implementations. Read multiple example files fully - you have 1M context. Report: pattern locations, full code examples, conventions, naming standards.
+- prompt: Find existing patterns for [AREA FROM REQUEST]. Use Grep to search, LSP find-references for usage patterns. Read multiple example files fully - you have 1M context. Report: pattern locations, full code examples, conventions, naming standards.
 
 **Task 3 (dependencies):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Identify all files to modify for [REQUEST]. Use Grep to trace imports and references. Read related files fully to understand relationships - you have 1M context. Report: complete file list, dependency graph, modification order, potential conflicts.
+- prompt: Identify all files to modify for [REQUEST]. Use Grep and LSP go-to-definition to trace imports. Read related files fully - you have 1M context. Report: complete file list, dependency graph, modification order, potential conflicts.
 
 Agent count:
 - 1 agent: isolated to known files

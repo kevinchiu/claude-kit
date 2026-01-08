@@ -16,22 +16,24 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 ## Phase 1: Explore
 
-Launch 3 Explore agents (sonnet, 1M context) in ONE message (parallel):
+Launch 3 Explore agents (sonnet, 1M context) in ONE message (parallel).
+
+Tools available: Glob, Grep, Read, and native LSP tools (go-to-definition, find-references, hover). Use all of them.
 
 **Task 1 (structure):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Use Glob to find all source files. Read config files and entry points thoroughly - you have 1M context. Report: complete tree structure, key directories, build system.
+- prompt: Use Glob to find all source files. Read config files and entry points. Use LSP tools for type info - you have 1M context. Report: complete tree structure, key directories, build system.
 
 **Task 2 (patterns):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Find patterns for [PLAN AREA]. Use Grep to search, then Read full files - you have 1M context. Report: pattern locations, full code examples, conventions.
+- prompt: Find patterns for [PLAN AREA]. Use Grep to search, LSP find-references for usage - you have 1M context. Report: pattern locations, full code examples, conventions.
 
 **Task 3 (dependencies):**
 - subagent_type: Explore
 - model: sonnet
-- prompt: Analyze dependencies between [FILES FROM PLAN]. Use Grep to trace imports, Read related files fully - you have 1M context. Report: complete dependency graph, modification order.
+- prompt: Analyze dependencies between [FILES FROM PLAN]. Use Grep and LSP go-to-definition to trace imports - you have 1M context. Report: complete dependency graph, modification order.
 
 ## Phase 2: Setup
 
