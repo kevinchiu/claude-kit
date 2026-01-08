@@ -18,14 +18,14 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
-Tools: Glob, Grep, Read, Bash, LSP, WebSearch.
+Tools: Glob, Grep, Read, Bash, LSP.
 
 | Agent | Prompt | Report |
 |-------|--------|--------|
 | structure | Map dirs. Glob source files. Read entry points. git log --oneline -20 for recent activity. | tree, key dirs, entry points, active areas |
 | patterns | Find patterns for [PLAN AREA]. Grep, LSP find-references. git blame to understand intent. | locations, code examples, conventions, why |
 | dependencies | Analyze deps for [FILES FROM PLAN]. Grep, LSP go-to-definition. npm ls or pip list. | dep graph, modification order |
-| types | Find types/interfaces for [PLAN AREA]. LSP hover. WebSearch for unfamiliar docs. | types, data shapes, API contracts |
+| types | Find types/interfaces for [PLAN AREA]. LSP hover. | types, data shapes, API contracts |
 | tests | Find test patterns for [PLAN AREA]. Locate fixtures. git log on test files. | test conventions, fixtures |
 | config | Analyze build/config. Read package.json, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
 
