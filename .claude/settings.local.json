@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "WebFetch(domain:claude-plugins.dev)",
+      "WebFetch(domain:stevekinney.com)",
+      "WebFetch(domain:alexop.dev)",
+      "WebFetch(domain:en.bioerrorlog.work)"
     ]
   }
 }

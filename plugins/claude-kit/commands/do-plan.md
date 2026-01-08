@@ -1,5 +1,6 @@
 ---
 description: Persistent plan execution
+argument-hint: [plan-file]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, TodoWrite
 ---
 
