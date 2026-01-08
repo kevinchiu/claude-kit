@@ -10,7 +10,13 @@ Autonomous parallel plan execution with dependency-aware critical path optimizat
 
 ## Skills
 
-### plan
+### parallel-explore
+
+Parallel codebase exploration with 6 specialized agents. Used by make-plan and do-plan.
+
+**Agents:** structure, patterns, dependencies, types, tests, config
+
+### make-plan
 
 Creates implementation plans with parallel exploration and user approval.
 
@@ -18,11 +24,11 @@ Creates implementation plans with parallel exploration and user approval.
 1. Launches parallel Explore agents to understand codebase
 2. Designs implementation approach with Plan agents
 3. Writes plan to `.claude/plans/[name].md`
-4. Exits plan mode for user approval
+4. Asks for user approval
 
 **Usage:**
 ```
-/plan [task description]
+/make-plan [task description]
 ```
 
 ### do-plan
@@ -30,22 +36,26 @@ Creates implementation plans with parallel exploration and user approval.
 Executes plans in parallel with state tracking.
 
 **How it works:**
-1. Launches parallel Explore agents to understand codebase
+1. Reads exploration context from plan (or explores if missing)
 2. Creates state file at `.claude/plans/[name].state.md`
 3. Analyzes dependencies and builds execution groups
-4. Launches multiple Task agents for independent steps
-5. Tracks progress with status markers (⏳ pending, 🔄 in_progress, ✅ completed, ❌ blocked)
+4. Launches parallel Task agents for independent steps
+5. Tracks progress with status markers (pending, in_progress, completed, blocked)
 6. Resumes from last checkpoint if interrupted
 
 **Usage:**
 ```
 /do-plan [plan-file]
 ```
-Or say: "do the plan", "execute", "proceed", "continue plan"
+Or say: "do the plan", "do-plan", "proceed", "continue plan"
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/plan [task]` | Create a plan for a task |
+| `/make-plan [task]` | Create a plan for a task |
 | `/do-plan [file]` | Execute a plan file |
+
+## Hooks
+
+**SessionStart**: Checks for incomplete plans and notifies you to resume.

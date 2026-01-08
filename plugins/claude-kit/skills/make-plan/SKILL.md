@@ -1,9 +1,9 @@
 ---
-name: plan
-description: Plan implementation tasks with parallel exploration and explicit user approval. Trigger: "plan", "let's plan", "help me plan", /plan command.
+name: make-plan
+description: Plan implementation tasks with parallel exploration and explicit user approval. Trigger: "make a plan", "let's plan", "help me plan", /make-plan command.
 ---
 
-# Plan Skill
+# Make-Plan Skill
 
 Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/ExitPlanMode.
 
@@ -18,18 +18,7 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 ## Phase 1: Explore
 
-Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
-
-Tools: Glob, Grep, Read, Bash, LSP. Also use any other available tools (MCP, host tools like tree, etc.).
-
-| Agent | Prompt | Report |
-|-------|--------|--------|
-| structure | Map dirs. Glob source files. Read entry points. git log --oneline -20 for recent activity. | tree, key dirs, entry points, active areas |
-| patterns | Find patterns for [AREA]. Grep, LSP find-references. git blame to understand intent. | locations, code examples, conventions, why |
-| dependencies | Analyze deps for [FILES]. Grep, LSP go-to-definition. npm ls or pip list for dep tree. | dep graph, modification order, conflicts |
-| types | Find types/interfaces for [AREA]. Grep for type/interface defs. Read type files. LSP hover. | types, data shapes, API contracts |
-| tests | Find test patterns for [AREA]. Glob for test files. Read examples. Locate fixtures, mocks. git log. | test locations, conventions, fixtures |
-| config | Analyze build/config. Read package.json, tsconfig, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
+Invoke the parallel-explore skill to launch 6 agents and gather codebase context.
 
 ## Phase 2: Clarify
 
@@ -110,26 +99,23 @@ Write to `.claude/plans/[plan-name].md`:
 Required for each step:
 - Exact file paths
 - Explicit dependencies
-- Pattern/example reference
+- Pattern reference
 
 ## Phase 5: Pre-flight Validation
 
-Resolve all blockers now. Try to fix automatically first - system prompts user for permissions when needed.
+Detect blockers and get user input where needed. No side effects - execution is do-plan's job.
 
-| Issue | Resolution |
-|-------|------------|
-| Pattern file missing | Find alternative, update plan |
-| Target dir missing | Create it |
-| Env var missing | Add to .env.example, prompt user to set |
-| Dependency missing | Install it (npm install, pip install, etc.) |
-| File conflict | Check git status, resolve or note in plan |
-| Config key missing | Add with sensible default |
+Ask user only for: login credentials or API keys.
 
-After resolving, output summary:
+Auto-resolved by do-plan (don't ask):
+- Target dir missing (mkdir)
+- Dependency missing (npm/pip install)
+- Config key missing (add default)
+
+After validation:
 ```
-Pre-flight: [N] resolved, [M] need user action
-[List what was resolved]
-[List what needs user action]
+Pre-flight complete.
+[List items that need user action before proceeding]
 ```
 
 ## Phase 6: Approval
@@ -154,12 +140,3 @@ Response handling:
 
 Invoke do-plan: say "Do the plan" or run /do-plan [plan-file]
 
-## Tool Priority
-
-| Task | Use | Avoid |
-|------|-----|-------|
-| Read file | Read | cat, head, tail |
-| Search | Grep | grep, rg |
-| Find files | Glob | find, ls |
-| Edit | Edit | sed, awk |
-| Write | Write | echo, heredoc |

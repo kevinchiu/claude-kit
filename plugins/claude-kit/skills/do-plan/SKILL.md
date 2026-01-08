@@ -18,18 +18,7 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 **If plan has "Exploration Context" section:** Read it, skip exploration.
 
-**If missing:** Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
-
-Tools: Glob, Grep, Read, Bash, LSP. Also use any other available tools (MCP, host tools like tree, etc.).
-
-| Agent | Prompt | Report |
-|-------|--------|--------|
-| structure | Map dirs. Glob source files. Read entry points. git log --oneline -20 for recent activity. | tree, key dirs, entry points, active areas |
-| patterns | Find patterns for [PLAN AREA]. Grep, LSP find-references. git blame to understand intent. | locations, code examples, conventions, why |
-| dependencies | Analyze deps for [FILES FROM PLAN]. Grep, LSP go-to-definition. npm ls or pip list. | dep graph, modification order |
-| types | Find types/interfaces for [PLAN AREA]. Grep for type/interface defs. Read type files. LSP hover. | types, data shapes, API contracts |
-| tests | Find test patterns for [PLAN AREA]. Glob for test files. Read examples. Locate fixtures. git log. | test conventions, fixtures |
-| config | Analyze build/config. Read package.json, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
+**If missing:** Invoke the parallel-explore skill to launch 6 agents and gather codebase context.
 
 ## Phase 2: Setup
 
@@ -116,7 +105,7 @@ For each group:
 | Explore/research | Explore | sonnet |
 | Simple changes | general-purpose | haiku |
 | Complex architecture | general-purpose | opus |
-| Run tests | Bash | haiku |
+| Run tests | general-purpose | haiku |
 
 ### Subagent Prompt
 
@@ -125,21 +114,14 @@ Implement step [N]: [description]
 
 Context:
 - Structure: [from explore]
-- Pattern: [path/to/example.ts]
+- Pattern: [path/to/similar/code.ts]
 - Related files: [from explore]
 
 Files: [list]
 Requirements: [from plan]
 
-Do NOT create state file. Implement and report what you did.
+Implement and report what you did.
 ```
-
-### Parallel Launch
-
-To run steps 1,2,3 in parallel, ONE message with THREE Task calls:
-- Task 1: Step 1 prompt, general-purpose, sonnet
-- Task 2: Step 2 prompt, general-purpose, sonnet
-- Task 3: Step 3 prompt, Explore, haiku
 
 ## Phase 4: Complete
 
@@ -164,16 +146,6 @@ On "continue plan":
 2. Find steps marked in_progress or pending
 3. Rebuild groups from remaining steps
 4. Continue from Phase 3
-
-## Tool Priority
-
-| Task | Use | Avoid |
-|------|-----|-------|
-| Read | Read | cat, head, tail |
-| Search | Grep | grep, rg |
-| Find | Glob | find, ls |
-| Edit | Edit | sed, awk |
-| Write | Write | echo, heredoc |
 
 ## Core Rules
 

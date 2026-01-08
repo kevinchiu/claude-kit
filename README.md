@@ -1,12 +1,6 @@
 # claude-kit
 
-Powerful plugins for Claude Code.
-
-- ~~beads~~
-- ~~agent mailboxes~~
-- ~~dev containers~~
-- ~~worktrees~~
-- durable parallel execution across sessions
+Autonomous parallel plan execution with dependency-aware critical path optimization.
 
 ## Installation
 
@@ -24,24 +18,41 @@ If you previously installed `do-plan`, uninstall it and install `claude-kit`:
 /plugin → Install → claude-kit
 ```
 
-## Plugins
+## What It Does
 
-| Plugin | Description |
-|--------|-------------|
-| [claude-kit](./plugins/claude-kit) | Claude Code productivity toolkit |
+**Plan** → **Execute** workflow:
+1. **make-plan**: Parallel exploration, architecture design, user approval
+2. **do-plan**: Autonomous parallel execution with state tracking
 
-## claude-kit
+## Skills
 
-### do-plan
+| Skill | Description |
+|-------|-------------|
+| parallel-explore | 6 specialized agents for codebase exploration |
+| make-plan | Create implementation plans with user approval |
+| do-plan | Execute plans in parallel with state tracking |
 
-Durable plan execution with state tracking in `.claude/plans/*.state.md`, crash recovery, and auto-resume on session start.
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/make-plan [task]` | Create a plan for a task |
+| `/do-plan [file]` | Execute a plan file |
+
+## Usage
 
 ```
-/do-plan <plan-file>
+/make-plan add user authentication
 ```
 
-Or say: "do the plan", "execute", "proceed", "continue plan"
+After approval:
 
-### Hooks
+```
+/do-plan
+```
 
-**SessionStart**: On every new session, Claude checks `.claude/plans/` for incomplete `.state.md` files and notifies you if there's a plan to resume. No auto-resume - waits for your go-ahead.
+Or say: "do the plan", "proceed", "continue plan"
+
+## Hooks
+
+**SessionStart**: Checks `.claude/plans/` for incomplete `.state.md` files and notifies you if there's a plan to resume. No auto-resume - waits for your go-ahead.
