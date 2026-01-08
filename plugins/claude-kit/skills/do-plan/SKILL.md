@@ -25,8 +25,8 @@ Tools: Glob, Grep, Read, Bash, LSP.
 | structure | Map dirs. Glob source files. Read entry points. git log --oneline -20 for recent activity. | tree, key dirs, entry points, active areas |
 | patterns | Find patterns for [PLAN AREA]. Grep, LSP find-references. git blame to understand intent. | locations, code examples, conventions, why |
 | dependencies | Analyze deps for [FILES FROM PLAN]. Grep, LSP go-to-definition. npm ls or pip list. | dep graph, modification order |
-| types | Find types/interfaces for [PLAN AREA]. LSP hover. | types, data shapes, API contracts |
-| tests | Find test patterns for [PLAN AREA]. Locate fixtures. git log on test files. | test conventions, fixtures |
+| types | Find types/interfaces for [PLAN AREA]. Grep for type/interface defs. Read type files. LSP hover. | types, data shapes, API contracts |
+| tests | Find test patterns for [PLAN AREA]. Glob for test files. Read examples. Locate fixtures. git log. | test conventions, fixtures |
 | config | Analyze build/config. Read package.json, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
 
 ## Phase 2: Setup
