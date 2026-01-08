@@ -95,11 +95,13 @@ Write to `.claude/plans/[plan-name].md`:
 - Files: [exact paths]
 - Dependencies: None
 - Pattern: [path/to/similar/code.ts]
+- Notes: [implementation details, edge cases, decisions]
 
 ### Step 2: [Description]
 - Files: [exact paths]
 - Dependencies: Step 1
 - Pattern: [path/to/similar/code.ts]
+- Notes: [implementation details, edge cases, decisions]
 
 ## Verification
 [End-to-end test command]
