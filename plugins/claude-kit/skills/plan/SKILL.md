@@ -20,16 +20,16 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
-Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover).
+Tools: Glob, Grep, Read, Bash, LSP, WebSearch.
 
 | Agent | Prompt | Report |
 |-------|--------|--------|
-| structure | Map dirs. Glob source files. Read entry points. | tree, key dirs, entry points |
-| patterns | Find patterns for [AREA]. Grep, LSP find-references. | locations, code examples, conventions |
-| dependencies | Analyze deps for [FILES]. Grep, LSP go-to-definition. | dep graph, modification order, conflicts |
-| types | Find types/interfaces for [AREA]. LSP hover. | types, data shapes, API contracts |
-| tests | Find test patterns for [AREA]. Locate fixtures, mocks. | test locations, conventions, fixtures |
-| config | Analyze build/config. Read package.json, tsconfig, .env.example. Grep for process.env/import.meta.env usage. | build process, env vars, external deps |
+| structure | Map dirs. Glob source files. Read entry points. git log --oneline -20 for recent activity. | tree, key dirs, entry points, active areas |
+| patterns | Find patterns for [AREA]. Grep, LSP find-references. git blame to understand intent. | locations, code examples, conventions, why |
+| dependencies | Analyze deps for [FILES]. Grep, LSP go-to-definition. npm ls or pip list for dep tree. | dep graph, modification order, conflicts |
+| types | Find types/interfaces for [AREA]. LSP hover. WebSearch for unfamiliar type docs. | types, data shapes, API contracts |
+| tests | Find test patterns for [AREA]. Locate fixtures, mocks. git log on test files for recent changes. | test locations, conventions, fixtures |
+| config | Analyze build/config. Read package.json, tsconfig, .env.example. Grep for process.env/import.meta.env. | build process, env vars, external deps |
 
 ## Phase 2: Clarify
 
