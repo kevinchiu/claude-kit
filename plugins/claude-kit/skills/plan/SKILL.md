@@ -114,43 +114,22 @@ Required for each step:
 
 ## Phase 5: Pre-flight Validation
 
-Verify everything for zero-prompt execution. Resolve ALL blockers now.
+Resolve all blockers now. Try to fix automatically first - system prompts user for permissions when needed.
 
-### Checks
+| Issue | Resolution |
+|-------|------------|
+| Pattern file missing | Find alternative, update plan |
+| Target dir missing | Create it |
+| Env var missing | Add to .env.example, prompt user to set |
+| Dependency missing | Install it (npm install, pip install, etc.) |
+| File conflict | Check git status, resolve or note in plan |
+| Config key missing | Add with sensible default |
 
-| Check | Verify | If Missing |
-|-------|--------|------------|
-| Pattern files exist | Read each pattern | AskUserQuestion for alternative |
-| Target dirs exist | Glob parent dirs | Create or ask |
-| Env vars set | Bash: test -n "$VAR" | AskUserQuestion |
-| Config keys present | Grep config files | AskUserQuestion |
-| Dependencies installed | Bash: which tool | AskUserQuestion |
-| No file conflicts | Glob for existing | AskUserQuestion: overwrite? |
-
-### Decisions
-
-For each step verify:
-- Exact approach specified (no "could do X or Y")
-- Naming conventions defined
-- Error handling pattern specified
-- Test scope defined
-
-Any ambiguity found: AskUserQuestion to resolve.
-
-### External Services
-
-If plan uses external services:
-- Verify API base URL configured
-- Verify connection strings exist
-- Verify credentials/tokens available
-
-### Report
-
-After validation, output summary:
+After resolving, output summary:
 ```
-Pre-flight: [N] checks passed, [M] issues
-[List any resolved issues]
-Ready for approval.
+Pre-flight: [N] resolved, [M] need user action
+[List what was resolved]
+[List what needs user action]
 ```
 
 ## Phase 6: Approval
