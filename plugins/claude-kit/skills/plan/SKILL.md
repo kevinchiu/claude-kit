@@ -52,17 +52,11 @@ Skip if requirements are unambiguous.
 
 ## Phase 3: Design
 
-Launch Plan agent(s):
-
-| Complexity | Agents |
-|------------|--------|
-| Simple | 1 |
-| Medium | 2 (different perspectives) |
-| Complex | 3 |
+Launch Plan agent with Opus:
 
 **Task (design):**
 - subagent_type: Plan
-- model: sonnet (opus for complex)
+- model: opus
 - prompt: Design implementation for [REQUEST]. Context: [exploration results]. Clarifications: [Phase 2 answers]. Provide: steps, files per step, dependencies, risks.
 
 ## Phase 4: Write Plan
