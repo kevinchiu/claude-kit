@@ -16,33 +16,18 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 
 ## Phase 1: Explore
 
-Launch 6 Explore agents (sonnet, 1M context) in ONE message (parallel).
+Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
-Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover). Read files thoroughly.
+Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover).
 
-**Task 1 (structure):**
-- subagent_type: Explore, model: sonnet
-- prompt: Map directory structure. Use Glob to find source files. Read entry points. Report: tree, key dirs, entry points.
-
-**Task 2 (patterns):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find patterns for [PLAN AREA]. Use Grep, LSP find-references. Report: pattern locations, code examples, conventions.
-
-**Task 3 (dependencies):**
-- subagent_type: Explore, model: sonnet
-- prompt: Analyze dependencies for [FILES FROM PLAN]. Use Grep, LSP go-to-definition. Report: dependency graph, modification order.
-
-**Task 4 (types):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find types/interfaces for [PLAN AREA]. Use LSP hover. Report: types, data shapes, API contracts.
-
-**Task 5 (tests):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find test patterns for [PLAN AREA]. Locate tests, fixtures. Report: test conventions, fixture patterns.
-
-**Task 6 (config):**
-- subagent_type: Explore, model: sonnet
-- prompt: Analyze build/config. Read package.json, config files, env. Report: build process, env vars, external deps.
+| Agent | Prompt | Report |
+|-------|--------|--------|
+| structure | Map dirs. Glob source files. Read entry points. | tree, key dirs, entry points |
+| patterns | Find patterns for [PLAN AREA]. Grep, LSP find-references. | locations, code examples, conventions |
+| dependencies | Analyze deps for [FILES FROM PLAN]. Grep, LSP go-to-definition. | dep graph, modification order |
+| types | Find types/interfaces for [PLAN AREA]. LSP hover. | types, data shapes, API contracts |
+| tests | Find test patterns for [PLAN AREA]. Locate fixtures. | test conventions, fixtures |
+| config | Analyze build/config. Read package.json, env. | build process, env vars, external deps |
 
 ## Phase 2: Setup
 

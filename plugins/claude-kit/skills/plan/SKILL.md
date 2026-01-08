@@ -18,33 +18,18 @@ Custom plan mode using AskUserQuestion for approval. Does NOT use EnterPlanMode/
 
 ## Phase 1: Explore
 
-Launch 6 Explore agents (sonnet, 1M context) in ONE message (parallel).
+Launch 6 Explore agents in ONE message. All use: subagent_type: Explore, model: sonnet.
 
-Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover). Read files thoroughly.
+Tools: Glob, Grep, Read, LSP (go-to-definition, find-references, hover).
 
-**Task 1 (structure):**
-- subagent_type: Explore, model: sonnet
-- prompt: Map directory structure. Use Glob to find source files. Read entry points. Report: tree, key dirs, entry points, organization.
-
-**Task 2 (patterns):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find patterns for [AREA]. Use Grep, LSP find-references. Read examples fully. Report: pattern locations, code examples, conventions.
-
-**Task 3 (dependencies):**
-- subagent_type: Explore, model: sonnet
-- prompt: Analyze dependencies for [FILES]. Use Grep, LSP go-to-definition. Report: dependency graph, modification order, conflicts.
-
-**Task 4 (types):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find types/interfaces for [AREA]. Use LSP hover. Read type files. Report: relevant types, data shapes, API contracts.
-
-**Task 5 (tests):**
-- subagent_type: Explore, model: sonnet
-- prompt: Find test patterns for [AREA]. Locate tests, fixtures, mocks. Report: test locations, conventions, fixture patterns.
-
-**Task 6 (config):**
-- subagent_type: Explore, model: sonnet
-- prompt: Analyze build/config. Read package.json, tsconfig, env files. Report: build process, env vars, external dependencies.
+| Agent | Prompt | Report |
+|-------|--------|--------|
+| structure | Map dirs. Glob source files. Read entry points. | tree, key dirs, entry points |
+| patterns | Find patterns for [AREA]. Grep, LSP find-references. | locations, code examples, conventions |
+| dependencies | Analyze deps for [FILES]. Grep, LSP go-to-definition. | dep graph, modification order, conflicts |
+| types | Find types/interfaces for [AREA]. LSP hover. | types, data shapes, API contracts |
+| tests | Find test patterns for [AREA]. Locate fixtures, mocks. | test locations, conventions, fixtures |
+| config | Analyze build/config. Read package.json, tsconfig, env. | build process, env vars, external deps |
 
 ## Phase 2: Clarify
 
