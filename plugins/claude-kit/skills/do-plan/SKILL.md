@@ -149,7 +149,18 @@ Implement and report what you did.
 2. Add completion timestamp
 3. Move to `.claude/plans/archive/[name].state.md`
 
-## Phase 5: Review (if available)
+## Phase 5: Review
+
+### Static Analysis
+
+Run any available static analysis tools on changed files:
+- Type checkers: `tsc --noEmit`, `mypy`, `pyright`
+- Linters: `eslint`, `ruff`, `clippy`
+- Build: `npm run build`, `cargo check`
+
+Fix issues automatically. If unfixable, report to user.
+
+### Code Review (if available)
 
 If a multi-aspect code review agent/skill is available (e.g., `pr-review-toolkit:review-pr`, `feature-dev:code-reviewer`), invoke it on all changed files.
 
