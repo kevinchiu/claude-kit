@@ -1,6 +1,6 @@
 {
   "name": "claude-kit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Parallel planning and execution with codebase exploration, dependency-aware scheduling, and adaptive task splitting",
   "author": {
     "name": "Kevin Chiu"
