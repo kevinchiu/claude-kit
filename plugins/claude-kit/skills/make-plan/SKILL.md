@@ -42,23 +42,7 @@ Multiple agents only for genuine architectural tradeoffs:
 | Scope | "Minimal (YAGNI)" vs "Extensible" |
 | Performance critical | "Simple first" vs "Optimized" |
 
-**Task (design):**
-- subagent_type: Plan
-- model: opus
-- prompt: |
-    Design implementation for [REQUEST].
-
-    Exploration context:
-    - Structure: [summary from structure agent]
-    - Patterns: [summary from patterns agent]
-    - Dependencies: [summary from dependencies agent]
-    - Types: [summary from types agent]
-    - Tests: [summary from tests agent]
-    - Config: [summary from config agent]
-
-    Clarifications: [Phase 2 answers]
-
-    Provide: steps, files per step, dependencies between steps, risks.
+Launch Plan agent (opus) with the request, exploration context, and any clarifications. Get back: steps, files per step, dependencies, risks.
 
 ## Phase 4: Write Plan
 
@@ -127,16 +111,5 @@ Use AskUserQuestion:
   - "Review first" - Wait for user
   - "Revise plan" - Get feedback, update, re-submit
 
-Response handling:
-
-| Response | Action |
-|----------|--------|
-| Approve | Invoke do-plan skill |
-| Review | Wait for user response |
-| Revise | Ask for feedback, update plan, re-submit |
-| Other | Treat as revision feedback |
-
-## After Approval
-
-Invoke do-plan: say "Do the plan" or run /do-plan [plan-file]
+On approval, invoke do-plan. On revision request, get feedback, update, re-submit.
 

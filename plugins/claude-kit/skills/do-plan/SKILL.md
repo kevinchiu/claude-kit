@@ -64,19 +64,7 @@ Agent: general-purpose (opus)
 
 ### 2.2 Analyze Dependencies
 
-Dependency types:
-
-| Type | Detection |
-|------|-----------|
-| File overlap | Steps modify same file(s) → sequential |
-| File | Step B modifies file Step A creates |
-| Code | Step B imports code Step A writes |
-| Data | Step B needs Step A output |
-| Order | Step B tests what Step A implements |
-
-**File overlap rule:** If two steps touch ANY of the same files, they MUST be sequential (not parallel). This prevents merge conflicts and inconsistent changes.
-
-Independent if: no overlapping files AND no shared data AND no validation relationship.
+Identify dependencies between steps. **File overlap rule:** If two steps touch ANY of the same files, they MUST be sequential (not parallel).
 
 ### 2.3 Build Execution Groups
 
@@ -112,36 +100,9 @@ For each group:
 | Complex architecture | general-purpose | opus |
 | Run tests | general-purpose | haiku |
 
-### Pre-flight (per step)
-
-Before launching each step's agent, verify:
-1. All listed files exist (or are being created)
-2. Parent directories exist for new files
-
-If files are missing and not being created, mark step blocked.
-
 ### Subagent Prompt
 
-```
-Implement step [N]: [description]
-
-Context:
-- Structure: [from explore]
-- Pattern: [path/to/similar/code.ts]
-- Related files: [from explore]
-
-Files: [list]
-Requirements: [from plan]
-
-Parallel work (FYI): [other steps in this group and their files]
-
-Guidelines:
-- If modifying function/method signatures, check for callers first
-- Avoid modifying files assigned to parallel agents unless necessary
-- Report any files you modified beyond your assigned list
-
-Implement and report what you did.
-```
+Include: step description, exploration context, files, requirements, and what parallel agents are working on (for awareness).
 
 ## Phase 4: Complete
 
@@ -157,15 +118,7 @@ Run appropriate static analysis tools for changed files. Fix issues automaticall
 
 ### Code Review (if available)
 
-If a multi-aspect code review agent/skill is available (e.g., `pr-review-toolkit:review-pr`, `feature-dev:code-reviewer`), invoke it on all changed files.
-
-Review should cover:
-- Code quality and style
-- Silent failures and error handling
-- Test coverage gaps
-- Type design issues
-
-Report findings to user. Fix critical issues automatically if straightforward.
+If a code review agent/skill is available, invoke it on changed files. Fix critical issues automatically.
 
 ## Handling Failures
 
