@@ -13,6 +13,7 @@ Autonomous parallel execution. Only main agent updates state file. Subagents do 
 2. SETUP - Create state file, analyze dependencies, build execution groups
 3. EXECUTE - Launch parallel subagents per group
 4. COMPLETE - Update state, archive
+5. REVIEW - Multi-aspect code review (if available)
 
 ## Phase 1: Explore
 
@@ -147,6 +148,18 @@ Implement and report what you did.
 1. Update progress to N/N
 2. Add completion timestamp
 3. Move to `.claude/plans/archive/[name].state.md`
+
+## Phase 5: Review (if available)
+
+If a multi-aspect code review agent/skill is available (e.g., `pr-review-toolkit:review-pr`, `feature-dev:code-reviewer`), invoke it on all changed files.
+
+Review should cover:
+- Code quality and style
+- Silent failures and error handling
+- Test coverage gaps
+- Type design issues
+
+Report findings to user. Fix critical issues automatically if straightforward.
 
 ## Handling Failures
 
