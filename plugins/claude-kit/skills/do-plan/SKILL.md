@@ -153,16 +153,7 @@ Implement and report what you did.
 
 ### Static Analysis
 
-Based on files changed, run appropriate available tools:
-
-| Files | Tools |
-|-------|-------|
-| `.ts`, `.tsx`, `.js` | `tsc --noEmit`, `eslint` |
-| `.py` | `mypy`, `ruff`, `pyright` |
-| `.rs` | `cargo check`, `clippy` |
-| `.go` | `go build`, `golint` |
-
-Fix issues automatically. If unfixable, report to user.
+Run appropriate static analysis tools for changed files. Fix issues automatically. If unfixable, report to user.
 
 ### Code Review (if available)
 
