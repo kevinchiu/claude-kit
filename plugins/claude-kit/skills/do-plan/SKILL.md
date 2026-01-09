@@ -109,8 +109,13 @@ Include: step description, exploration context, files, requirements, and what pa
 1. Update progress to N/N
 2. Add completion timestamp
 3. Move to `.claude/plans/archive/[name].state.md`
+4. Output brief summary: what was implemented, files changed, any issues encountered
 
 ## Phase 5: Review
+
+### Verification
+
+Run the plan's verification command (from ## Verification section). Fix failures.
 
 ### Static Analysis
 
