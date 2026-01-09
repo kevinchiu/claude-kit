@@ -153,10 +153,14 @@ Implement and report what you did.
 
 ### Static Analysis
 
-Run any available static analysis tools on changed files:
-- Type checkers: `tsc --noEmit`, `mypy`, `pyright`
-- Linters: `eslint`, `ruff`, `clippy`
-- Build: `npm run build`, `cargo check`
+Based on files changed, run appropriate available tools:
+
+| Files | Tools |
+|-------|-------|
+| `.ts`, `.tsx`, `.js` | `tsc --noEmit`, `eslint` |
+| `.py` | `mypy`, `ruff`, `pyright` |
+| `.rs` | `cargo check`, `clippy` |
+| `.go` | `go build`, `golint` |
 
 Fix issues automatically. If unfixable, report to user.
 
