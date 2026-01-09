@@ -107,9 +107,12 @@ Pre-flight complete.
 Use AskUserQuestion:
 - question: "Plan written to .claude/plans/[name].md. Ready to execute?"
 - options:
-  - "Approve and execute" - Start do-plan skill
-  - "Review first" - Wait for user
-  - "Revise plan" - Get feedback, update, re-submit
+  - "Approve and execute"
+  - "Review first"
+  - "Revise plan"
 
-On approval, invoke do-plan. On revision request, get feedback, update, re-submit.
+**After user responds:**
+- "Approve and execute" → Use the Skill tool to invoke `do-plan`. Example: `Skill(skill: "do-plan")`. Do NOT write code directly.
+- "Review first" → Stop and wait for user
+- "Revise plan" → Get feedback, update plan, re-ask
 
